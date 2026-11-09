@@ -255,7 +255,7 @@ body.classList.add("is-loading");
   // ------------------------------------------
 
   if (hero && heroSlidesEl) {
-    const SLIDE_MS = 6000;
+    const SLIDE_MS = 3500;
 
     const slides = [
       ...hero.querySelectorAll(".hero-slide")
@@ -686,6 +686,55 @@ if (cow) {
     lastY = y;
   }, { passive: true });
 }
+
+
+
+/* ==========================================
+   ABAYNESH — CLEAN FARM SLIDESHOW
+========================================== */
+
+function initializeFarmSlideshow() {
+  const section = document.querySelector(".farm-slideshow");
+
+  if (!section) return;
+
+  const slides = [...section.querySelectorAll(".farm-slide")];
+
+  if (slides.length < 2) return;
+
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  );
+
+  let currentIndex = 0;
+  let interval = null;
+
+  function showSlide(index) {
+    slides[currentIndex].classList.remove("is-active");
+
+    currentIndex = (index + slides.length) % slides.length;
+
+    slides[currentIndex].classList.add("is-active");
+  }
+
+  function startSlideshow() {
+    clearInterval(interval);
+
+    if (reducedMotion.matches || document.hidden) return;
+
+    interval = setInterval(() => {
+      showSlide(currentIndex + 1);
+    }, 6000);
+  }
+
+  document.addEventListener("visibilitychange", startSlideshow);
+
+  reducedMotion.addEventListener("change", startSlideshow);
+
+  startSlideshow();
+}
+
+initializeFarmSlideshow();
 
 
 })();
